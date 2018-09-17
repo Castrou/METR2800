@@ -17,11 +17,7 @@
  */
 void init(void) {
 	
-	//Detection
-	ADCSRA|=(1<<ADEN);
-	DDRD|=(1<<DDD0)|(1<<DDD1)|(1<<DDD2)|(1<<DDD3);
-	ADMUX |= (1<<REFS0);
-	ADMUX|=1<<MUX2;
+	init_detection();
 	
 }
 
@@ -29,7 +25,9 @@ int main(void)
 {
     /* main loop */
     while (1) {
-    
+		
+		sensor_check();
+		
 	}
 }
 

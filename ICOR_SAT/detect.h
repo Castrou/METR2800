@@ -9,7 +9,8 @@
 #ifndef DETECT_H_
 #define DETECT_H_
 
-
+void init_detection(void);
+void sensor_check(void);
 
 
 
