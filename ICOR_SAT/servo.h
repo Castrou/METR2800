@@ -9,7 +9,7 @@
 #ifndef SERVO_H_
 #define SERVO_H_
 
-
+void init_servo(void);
 
 
 
