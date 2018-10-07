@@ -6,10 +6,10 @@
  */ 
 
 // Definitions
-#define PHOTODIODE1 0b101 //PC5
-#define PHOTODIODE2 0b100  //PC4
-#define PHOTOTRANSISTOR1 0b011 //PC3
-#define PHOTOTRANSISTOR2 0b010 //PC2
+#define PHOTODIODE1 0b011 //PC3
+#define PHOTODIODE2 0b010  //PC2
+#define PHOTOTRANSISTOR1 0b001 //PC1
+#define PHOTOTRANSISTOR2 0b000 //PC0
 
 #define ADCMAX 1024
 
@@ -58,13 +58,10 @@ void sensor_check() {
 			
 		}
 	}
-	for (int i=1;<sizeof(sensors);i+=2)
-	{
-		if (i==1&& adcValues[i] >= ADCMAX*2.2/5 &&adcValues[i-1] >= ADCMAX*2.2/5 && ADMUX)
-		movement(adcValues[i]-adcValues[i-1],'h');
-		if (i==3&& adcValues[i] >= ADCMAX*2.5/5 &&adcValues[i-1] >= ADCMAX*2.2/5 && ADMUX)
-		movement(adcValues[i]-adcValues[i-1],'v');
-	}
+	if (adcvalues[0]>=1024*2.5/5||adcvalues[1]>=1024*2.5/5)
+	movement(adcvalues[0]-adcvalues[1],'h');
+	if (adcvalues[2]>=1024*2.5/5||adcvalues[3]>=1024*2.2/5)
+	movement(adcvalues[2]-adcvalues[3],'v');
 }
 void movement(int intensdiff, char plane){
 	// insert pmw code here
@@ -91,7 +88,8 @@ void movement(int intensdiff, char plane){
 			OCR0B+=1;
 		}
 		else{
-		 
+		  PORTD|=1<<PORTD4;
+		  for(int i=0;i<400;i++);
 		}
 	}
 
