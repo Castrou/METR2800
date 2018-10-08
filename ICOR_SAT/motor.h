@@ -9,7 +9,7 @@
 #ifndef MOTOR_H_
 #define MOTOR_H_
 
-
+void init_motor(void);
 
 
 

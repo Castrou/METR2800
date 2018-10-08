@@ -6,8 +6,8 @@
  */ 
 
 // Definitions
-#define PHOTODIODE1 0b011 //PC3
-#define PHOTODIODE2 0b010  //PC2
+#define PHOTODIODE1 0b011 //PC3 - left
+#define PHOTODIODE2 0b010  //PC2 - right
 #define PHOTOTRANSISTOR1 0b001 //PC1
 #define PHOTOTRANSISTOR2 0b000 //PC0
 
@@ -16,6 +16,7 @@
 // Global Variables
 int sensors[4] = {PHOTODIODE1, PHOTODIODE2, PHOTOTRANSISTOR1, PHOTOTRANSISTOR2};
 int adcValues[4];
+int detectFlag = 0;
 
 // Functions
 void init_detection() {
@@ -40,7 +41,7 @@ void init_detection() {
 
 void sensor_check() {
 	//checking all sensors
-	for (int i=0;i<sizeof(sensors);i++) {
+	for (int i=0; i < sizeof(sensors); i++) {
 	
 		ADMUX = sensors[i] | (1<<REFS0);
 		ADCSRA |= (1<<ADSC);
@@ -58,16 +59,24 @@ void sensor_check() {
 			
 		}
 	}
-	if (adcvalues[0]>=1024*2.5/5||adcvalues[1]>=1024*2.5/5)
-	movement(adcvalues[0]-adcvalues[1],'h');
-	if (adcvalues[2]>=1024*2.5/5||adcvalues[3]>=1024*2.2/5)
-	movement(adcvalues[2]-adcvalues[3],'v');
+	
+	if (adcValues[0] >= 1024*2.5/5 || adcValues[1] >= 1024*2.5/5) {
+		
+		movement(adcValues[0] - adcValues[1],'h');
+	
+	}
+	
+	if (adcValues[2] >= 1024*2.5/5 || adcValues[3] >= 1024*2.2/5) {
+		
+		movement(adcvalues[2] - adcvalues[3], 'v');
+		
+	}
 }
 void movement(int intensdiff, char plane){
-	// insert pmw code here
+	// insert pwm code here
 	// plane meaning rotation about an axis
 	//if the top phototrans>=4.6 & the bottom>=4.6 hit
-	if(plane=='v'){
+	if(plane == 'v'){
 		//vertical movement
 		/*if (intensdiff>0&& OCR1B>900){
 
@@ -78,18 +87,43 @@ void movement(int intensdiff, char plane){
 
 			OCR1B+=2;
 		}*/
-		if (intensdiff>10&& OCR0B>1){
+		if (intensdiff > 10 && OCR0B>1){
 
-			OCR0B-=1;
+			OCR0B -= 1;
 
 		}
-		else if (intensdiff<-10&& OCR0B<2){
+		else if (intensdiff < -10 && OCR0B<2){
 
-			OCR0B+=1;
+			OCR0B += 1;
+			
 		}
-		else{
-		  PORTD|=1<<PORTD4;
-		  for(int i=0;i<400;i++);
+		else {
+			
+		  PORTD |= (1<<PORTD4);
+		  for (int i=0; i < 400; i++);
+		  
+		}
+		
+	// Horizontal	
+	} else if (plane == 'h'){
+		
+		if (intensdiff > 10){
+
+			OCR1A = 0;
+			OCR1B = 60;
+			
+		}
+		else if (intensdiff < -10){
+			
+			OCR1B = 0
+			OCR1A = 60;
+			
+		}
+		else {
+			
+		  PORTD |= (1<<PORTD4);
+		  for (int i=0; i < 400; i++);
+		  
 		}
 	}
 
