@@ -6,6 +6,10 @@
  */ 
 #include <avr/interrupt.h> 
 #include <avr/io.h>
+<<<<<<< HEAD
+=======
+#include <avr/interrupt.h>
+>>>>>>> master
 
 // Peripheral Drivers
 #include <detect.h>
@@ -23,20 +27,28 @@
  */
 void init(void) {
 	
+<<<<<<< HEAD
 	init_motor(); 
+=======
+	init_motor();
+>>>>>>> master
 	init_detection();
+	init_servo();
 	
 }
 
 int main(void)
 {
+<<<<<<< HEAD
 	_delay_ms(10000);
 	OCR1A = 150;
+=======
+	
+>>>>>>> master
 	
     /* main loop */
     while (1) {
 		
-		sensor_check();
 		
 	}
 }
